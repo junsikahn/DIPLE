@@ -1,0 +1,16 @@
+$(function(){
+  // 일자 조정
+  $('#match_calendar').html('<%= escape_javascript(render "app/dashboards/calendar") %>');
+
+  LocalTime.run();
+
+  // 코멘트 불러오기
+  // $.ajax({
+  //   url: '<%== dashboard_comments_path(dashboard_id: params[:id], start_date: params[:start_date], end_date: params[:end_date], format: :js) %>'
+  // });
+
+  // 온라인 강의 불러오기
+  $.ajax({
+    url: '<%== dashboard_online_lecture_histories_path(dashboard_id: params[:id], start_date: params[:start_date], end_date: params[:end_date], format: :js) %>'
+  });
+});

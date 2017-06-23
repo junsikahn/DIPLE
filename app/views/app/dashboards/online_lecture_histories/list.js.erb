@@ -1,0 +1,12 @@
+<% if !@online_teachers.nil? %>
+  $('#online_lecture_history_online_teacher_id').html('').dropdown('clear');
+  $('#online_lecture_history_online_lecture_id').html('').dropdown('clear');
+  <% @online_teachers.each do |teacher| %>
+    $('#online_lecture_history_online_teacher_id').append('<option value="<%= teacher.id %>"><%= teacher.name %></option>');
+  <% end %>
+<% elsif !@online_lectures.nil? %>
+  $('#online_lecture_history_online_lecture_id').html('').dropdown('clear');
+  <% @online_lectures.each do |lecture| %>
+    $('#online_lecture_history_online_lecture_id').append('<option value="<%= lecture.id %>"><%= lecture.title %></option>')
+  <% end %>
+<% end %>

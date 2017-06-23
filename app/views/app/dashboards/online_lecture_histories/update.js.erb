@@ -1,0 +1,15 @@
+$(function(){
+  var target_div = $('#online_lecture_history_' + '<%= @original_online_lecture_history.id %>');
+  target_div.replaceWith("<%= escape_javascript(render(@original_online_lecture_history)) %>");
+  var replaced_div = $('#online_lecture_history_' + '<%= @original_online_lecture_history.id %>');
+  replaced_div.find('.ui.progress').progress();
+  replaced_div.find('.button.collapse').on('click', function(e){
+    $(this).parentsUntil('tbody', this).next('tr').transition('slide', 150);
+  });
+  replaced_div.find('.button.collapse').eq(0).click();
+
+  if ($('#match_form').hasClass('active')) {
+    var edit_url = '<%== edit_dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id], id: params[:id], start_date: params[:start_date], end_date: params[:end_date], format: :js) %>';
+    $.ajax({ url: edit_url });
+  }
+});

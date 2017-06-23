@@ -1,0 +1,76 @@
+i.close.icon
+div.header = @online_lecture_history.online_lecture.title
+div.content
+  table.ui.table
+    thead
+      tr
+        th.center.aligned 회차
+        th.center.aligned 제목
+        th.center.aligned 목표일자
+        th.center.aligned 제거
+        th.center.aligned 완료일자
+        th.center.aligned 제거
+    tbody
+      - @online_lecture_history.details.each do |detail|
+        tr
+          td.collapsing
+            span.ui.label = detail.online_lecture_list.order_to_s
+          td = detail.online_lecture_list.title
+          td.ui.form
+            div.field.planned_at.ui.calendar
+              div.ui.left.icon.input
+                = semantic_icon('calendar')
+                = text_field_tag :planned_at, detail.planned_at, class: 'center aligned',
+                                 data: { url: dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id],
+                                                                                    id: @online_lecture_history.id,
+                                                                                    detail_id: detail.id,
+                                                                                    start_date: params[:start_date],
+                                                                                    end_date: params[:end_date],
+                                                                                    detail_id: detail.id), remote: true, method: :patch }
+          - if detail.planned_at.nil?
+            td.collapsing
+              = link_to "#{semantic_icon('check')}".html_safe,
+                        dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id],
+                                                              id: @online_lecture_history.id,
+                                                              detail_id: detail.id,
+                                                              start_date: params[:start_date],
+                                                              end_date: params[:end_date],
+                                                              planned_at: true), remote: true, method: :patch, class: 'ui positive icon button', data: { tooltip: '목표 설정', position: 'right center' }
+          - else
+            td.collapsing
+              = link_to "#{semantic_icon('remove')}".html_safe,
+                        dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id],
+                                                              id: @online_lecture_history.id,
+                                                              detail_id: detail.id,
+                                                              start_date: params[:start_date],
+                                                              end_date: params[:end_date],
+                                                              planned_at: false), remote: true, method: :patch, class: 'ui basic icon button', data: { tooltip: '목표 취소', position: 'right center' }
+          td.ui.form
+            div.field.completed_at.ui.calendar
+              div.ui.left.icon.input
+                = semantic_icon('check')
+                = text_field_tag :completed_at, detail.completed_at, class: 'center aligned',
+                                 data: { url: dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id],
+                                                                                    id: @online_lecture_history.id,
+                                                                                    detail_id: detail.id,
+                                                                                    start_date: params[:start_date],
+                                                                                    end_date: params[:end_date],
+                                                                                    detail_id: detail.id), remote: true, method: :patch }
+          - if detail.completed_at.nil?
+            td.collapsing
+              = link_to "#{semantic_icon('check')}".html_safe,
+                        dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id],
+                                                              id: @online_lecture_history.id,
+                                                              detail_id: detail.id,
+                                                              start_date: params[:start_date],
+                                                              end_date: params[:end_date],
+                                                              completed_at: true), remote: true, method: :patch, class: 'ui positive icon button', data: { tooltip: '완료 처리', position: 'right center' }
+          - else
+            td.collapsing
+              = link_to "#{semantic_icon('remove')}".html_safe,
+                        dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id],
+                                                              id: @online_lecture_history.id,
+                                                              detail_id: detail.id,
+                                                              start_date: params[:start_date],
+                                                              end_date: params[:end_date],
+                                                              completed_at: false), remote: true, method: :patch, class: 'ui basic icon button', data: { tooltip: '완료 취소', position: 'right center' }

@@ -1,0 +1,72 @@
+div.clearfix
+  h1.ui.left.floated.header
+    span.ui.circular.red.label = "고#{@match.mentee.grade}"
+    = "#{@match.mentee.user.name} 학생"
+    small = " by #{@match.mentor.user.name} 선생님"
+  div.ui.right.floated.buttons#match_calendar
+    == render 'calendar'
+
+div.ui.divider.clearing
+
+div.ui.pointing.secondary.menu#main_tab
+  div.active.item data-tab="tab_1" 종합
+  div.item data-tab="tab_2" 국어
+  div.item data-tab="tab_3" 영어
+  div.item data-tab="tab_4" 수학
+
+div.ui.top.attached.segment.clearing.inverted
+  div.ui.left.floated.header
+    i.calendar.icon
+    div.content 과외 일정
+div.ui.bottom.attached.segment
+  - @match.schedules.each do |schedule|
+    div = "매주 #{schedule.day_name} #{l schedule.time_start, format: :long} ~ #{l schedule.time_end, format: :long}"
+
+div.ui.divider.clearing
+
+div#comment_div
+  div.ui.top.attached.segment.clearing.inverted
+    div.ui.left.floated.header
+      i.comment.outline.icon
+      div.content
+        | 코멘터리
+        div.ui.sub.header 멘토의 코멘터리를 등록하세요
+    = link_to "#{semantic_icon('add')} 코멘트 등록".html_safe, new_dashboard_comment_path(dashboard_id: params[:id]), remote: true, class: 'ui right floated icon basic inverted button'
+  div.ui.attached.menu
+    a.active.item data-tab="tab_1" 미완료 내역
+    a.item data-tab="tab_2" 완료 내역
+  div.ui.bottom.attached.active.tab.segment data-tab="tab_1"
+    table.ui.table
+      tbody#comments_completed_yet
+        tr.center.aligned.disabled
+          td 불러오는 중입니다
+  div.ui.bottom.attached.tab.segment data-tab="tab_2"
+    table.ui.table
+      tbody#comments_completed
+        tr.center.aligned.disabled
+          td 불러오는 중입니다
+
+div.ui.divider.clearing
+
+div#online_lecture_history_div
+  div.ui.top.attached.segment.clearing.inverted
+    div.ui.left.floated.header
+      i.tv.icon
+      div.content
+        | 온라인 강의
+        div.ui.sub.header 온라인 강의를 등록하세요
+    = link_to "#{semantic_icon('add')} 강의 등록".html_safe, new_dashboard_online_lecture_history_path(dashboard_id: params[:id]), remote: true, class: 'ui right floated icon basic inverted button'
+  div.ui.bottom.attached.segment#online_lecture_histories_list
+    table.ui.table
+      tbody
+        tr.center.aligned.disabled
+          td 불러오는 중입니다
+
+div#match_form.ui.modal.transition
+
+javascript:
+  $(function(){
+    $.ajax({
+      url: '#{{dashboard_path(dashboard_id: params[:id], start_date: l(@start_date, format: :date_dash), end_date: l(@end_date, format: :date_dash), format: :js)}}'
+    });
+  });

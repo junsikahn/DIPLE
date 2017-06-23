@@ -1,0 +1,10 @@
+<% comments_completed_yet = @comments.select{ |c| c.completed_at == nil }  %>
+<% comments_completed = @comments.select{ |c| c.completed_at != nil }  %>
+$(function(){
+  $('#comments_completed_yet').html("<%= escape_javascript(render(comments_completed_yet) || render('empty')) %>");
+  $('#comments_completed').html("<%= escape_javascript(render(comments_completed) || render('empty')) %>");
+
+  $('#comment_div .menu .item').tab({
+    context: $('#comment_div')
+  });
+});

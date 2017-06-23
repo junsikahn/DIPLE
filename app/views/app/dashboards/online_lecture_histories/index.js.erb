@@ -1,0 +1,11 @@
+$(function(){
+  var target_div = $('#online_lecture_histories_list');
+  target_div.html("<%= escape_javascript(render(@online_lecture_histories) || render('empty')) %>");
+
+  var replaced_div = $('#online_lecture_histories_list');
+  replaced_div.find('.ui.progress').progress();
+  replaced_div.find('.button.collapse').on('click', function(e){
+    $(this).parentsUntil('tbody', this).next('tr').transition('slide', 150);
+  });
+  replaced_div.find('.button.collapse').eq(0).click();
+});

@@ -1,0 +1,13 @@
+i.close.icon
+div.header 코멘트 등록하기
+div.content
+  = simple_form_for @comment, url: dashboard_comments_path, remote: true do |f|
+    div
+      = f.error_notification
+      = f.hidden_field :match_id
+      = f.hidden_field :user_id
+      = f.hidden_field :comment_id
+      = f.association :subject
+      = f.input :content
+      div.ui.divider
+      = f.button :button, '입력'

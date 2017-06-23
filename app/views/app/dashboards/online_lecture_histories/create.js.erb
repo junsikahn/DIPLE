@@ -1,0 +1,12 @@
+$(function(){
+  $('#match_form').empty().modal('hide');
+
+  <% if @online_lecture_history.started_at < @end_date %>
+    var target_div = $('#online_lecture_histories_list');
+    var added_div = target_div.append("<%= escape_javascript(render(@online_lecture_history) || render('empty')) %>");
+    added_div.find('.ui.progress').progress();
+    added_div.find('.button.collapse').on('click', function(e){
+      $(this).parentsUntil('tbody', this).next('tr').transition('slide', 150);
+    });
+  <% end %>
+});
