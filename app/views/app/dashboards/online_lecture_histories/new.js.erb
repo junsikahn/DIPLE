@@ -1,11 +1,11 @@
 $(function(){
-  $('#match_form').html("<%= escape_javascript(render 'new') %>").modal('show');
+  $('#online_lecture_form').html("<%= escape_javascript(render 'new') %>").modal('show');
 
   var start_date = $('#match_current_period').data('start');
   var end_date = $('#match_current_period').data('end');
-  $('#match_form').find('form').attr('action', $('#match_form').find('form').attr('action') + '?start_date=' + start_date + '&end_date=' + end_date);
+  $('#online_lecture_form').find('form').attr('action', $('#online_lecture_form').find('form').attr('action') + '?start_date=' + start_date + '&end_date=' + end_date);
 
-  var dropdownFields = $('#match_form').find('select');
+  var dropdownFields = $('#online_lecture_form').find('select');
   dropdownFields.dropdown({
     allowReselection: true
   });

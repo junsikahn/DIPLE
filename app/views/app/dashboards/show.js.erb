@@ -1,16 +1,25 @@
 $(function(){
   // 일자 조정
-  $('#match_calendar').html('<%= escape_javascript(render "app/dashboards/calendar") %>');
+  $('#match_period').html("<%= escape_javascript(render 'period') %>");
+  $('#match_calendar').find('tbody').remove();
+  $('#match_calendar').append("<%= escape_javascript(render 'calendar') %>");
+  var url = window.location.pathname + '?start_date=' + '<%= l @start_date, format: :date_dash %>' + '&end_date=' + '<%= l @end_date, format: :date_dash %>';
+  window.history.replaceState(null, null, url);
 
   LocalTime.run();
 
-  // 코멘트 불러오기
-  // $.ajax({
-  //   url: '<%== dashboard_comments_path(dashboard_id: params[:id], start_date: params[:start_date], end_date: params[:end_date], format: :js) %>'
-  // });
+  // 문제모음 불러오기
+  $.ajax({
+    url: '<%== dashboard_problem_collection_histories_path(dashboard_id: params[:id], start_date: params[:start_date], end_date: params[:end_date], format: :js) %>'
+  });
 
   // 온라인 강의 불러오기
   $.ajax({
     url: '<%== dashboard_online_lecture_histories_path(dashboard_id: params[:id], start_date: params[:start_date], end_date: params[:end_date], format: :js) %>'
   });
+
+  // 코멘트 불러오기
+  // $.ajax({
+  //   url: '<%== dashboard_comments_path(dashboard_id: params[:id], start_date: params[:start_date], end_date: params[:end_date], format: :js) %>'
+  // });
 });

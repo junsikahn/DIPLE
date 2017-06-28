@@ -10,10 +10,50 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170608063448) do
+ActiveRecord::Schema.define(version: 20170623210652) do
 
   create_table "banks", force: :cascade do |t|
     t.string "name", null: false
+  end
+
+  create_table "book_histories", force: :cascade do |t|
+    t.integer  "match_id",                  null: false
+    t.integer  "book_id",                   null: false
+    t.integer  "book_unit_id"
+    t.date     "started_at"
+    t.date     "planned_at"
+    t.date     "completed_at"
+    t.integer  "start_page"
+    t.integer  "planned_page"
+    t.integer  "completed_page"
+    t.integer  "online_lecture_history_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["book_id"], name: "index_book_histories_on_book_id"
+    t.index ["book_unit_id"], name: "index_book_histories_on_book_unit_id"
+    t.index ["match_id"], name: "index_book_histories_on_match_id"
+    t.index ["online_lecture_history_id"], name: "index_book_histories_on_online_lecture_history_id"
+  end
+
+  create_table "book_units", force: :cascade do |t|
+    t.integer "subject_id", null: false
+    t.integer "book_id",    null: false
+    t.string  "name"
+    t.integer "page"
+    t.integer "order"
+    t.integer "depth"
+    t.index ["book_id"], name: "index_book_units_on_book_id"
+    t.index ["subject_id"], name: "index_book_units_on_subject_id"
+  end
+
+  create_table "books", force: :cascade do |t|
+    t.integer "subject_id",   null: false
+    t.string  "name"
+    t.integer "total_page"
+    t.string  "series"
+    t.string  "publisher"
+    t.date    "published_at"
+    t.index ["subject_id"], name: "index_books_on_subject_id"
   end
 
   create_table "careers", force: :cascade do |t|
@@ -30,6 +70,21 @@ ActiveRecord::Schema.define(version: 20170608063448) do
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
     t.index ["user_id"], name: "index_careers_on_user_id"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.integer  "match_id",     null: false
+    t.integer  "user_id",      null: false
+    t.integer  "subject_id",   null: false
+    t.text     "content"
+    t.date     "completed_at"
+    t.integer  "comment_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["comment_id"], name: "index_comments_on_comment_id"
+    t.index ["match_id"], name: "index_comments_on_match_id"
+    t.index ["subject_id"], name: "index_comments_on_subject_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
   create_table "favored_subjects", force: :cascade do |t|
@@ -103,6 +158,22 @@ ActiveRecord::Schema.define(version: 20170608063448) do
     t.index ["user_id"], name: "index_mentors_on_user_id"
   end
 
+  create_table "online_lecture_histories", force: :cascade do |t|
+    t.integer  "match_id",                  null: false
+    t.integer  "online_lecture_id",         null: false
+    t.integer  "online_lecture_list_id"
+    t.date     "started_at"
+    t.date     "planned_at"
+    t.date     "completed_at"
+    t.integer  "online_lecture_history_id"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["match_id"], name: "index_online_lecture_histories_on_match_id"
+    t.index ["online_lecture_history_id"], name: "index_online_lecture_histories_on_online_lecture_history_id"
+    t.index ["online_lecture_id"], name: "index_online_lecture_histories_on_online_lecture_id"
+    t.index ["online_lecture_list_id"], name: "index_online_lecture_histories_on_online_lecture_list_id"
+  end
+
   create_table "online_lecture_lists", force: :cascade do |t|
     t.integer  "online_lecture_id",              null: false
     t.integer  "order"
@@ -140,6 +211,91 @@ ActiveRecord::Schema.define(version: 20170608063448) do
     t.string  "uid",                null: false
     t.integer "online_provider_id", null: false
     t.index ["online_provider_id"], name: "index_online_teachers_on_online_provider_id"
+  end
+
+  create_table "problem_collection_histories", force: :cascade do |t|
+    t.integer  "match_id",              null: false
+    t.integer  "problem_collection_id", null: false
+    t.integer  "score"
+    t.date     "planned_at"
+    t.date     "completed_at"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.index ["match_id"], name: "index_problem_collection_histories_on_match_id"
+    t.index ["problem_collection_id"], name: "index_problem_collection_histories_on_problem_collection_id"
+  end
+
+  create_table "problem_collection_to_problems", force: :cascade do |t|
+    t.integer "problem_collection_id", null: false
+    t.integer "problem_id",            null: false
+    t.integer "order"
+    t.index ["problem_collection_id"], name: "index_problem_collection_to_problems_on_problem_collection_id"
+    t.index ["problem_id"], name: "index_problem_collection_to_problems_on_problem_id"
+  end
+
+  create_table "problem_collections", force: :cascade do |t|
+    t.integer  "subject_id",        null: false
+    t.integer  "problem_source_id", null: false
+    t.string   "name",              null: false
+    t.integer  "total_score"
+    t.date     "test_day"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["problem_source_id"], name: "index_problem_collections_on_problem_source_id"
+    t.index ["subject_id"], name: "index_problem_collections_on_subject_id"
+  end
+
+  create_table "problem_histories", force: :cascade do |t|
+    t.integer  "match_id",                      null: false
+    t.integer  "subject_id",                    null: false
+    t.integer  "problem_collection_id",         null: false
+    t.integer  "problem_id",                    null: false
+    t.integer  "problem_collection_history_id"
+    t.integer  "users_answer"
+    t.boolean  "correct"
+    t.boolean  "check"
+    t.string   "comment_image_file_name"
+    t.string   "comment_image_content_type"
+    t.integer  "comment_image_file_size"
+    t.datetime "comment_image_updated_at"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.index ["match_id"], name: "index_problem_histories_on_match_id"
+    t.index ["problem_collection_history_id"], name: "index_problem_histories_on_problem_collection_history_id"
+    t.index ["problem_collection_id"], name: "index_problem_histories_on_problem_collection_id"
+    t.index ["problem_id"], name: "index_problem_histories_on_problem_id"
+    t.index ["subject_id"], name: "index_problem_histories_on_subject_id"
+  end
+
+  create_table "problem_sources", force: :cascade do |t|
+    t.string "name", null: false
+  end
+
+  create_table "problems", force: :cascade do |t|
+    t.integer  "subject_id",                            null: false
+    t.integer  "level"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.integer  "answer"
+    t.string   "answer_image_file_name"
+    t.string   "answer_image_content_type"
+    t.integer  "answer_image_file_size"
+    t.datetime "answer_image_updated_at"
+    t.integer  "score",                     default: 1
+    t.integer  "total_count",               default: 0
+    t.integer  "correct_count",             default: 0
+    t.integer  "problem_id"
+    t.string   "audio_file_name"
+    t.string   "audio_content_type"
+    t.integer  "audio_file_size"
+    t.datetime "audio_updated_at"
+    t.string   "problem_hwp"
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+    t.index ["problem_id"], name: "index_problems_on_problem_id"
+    t.index ["subject_id"], name: "index_problems_on_subject_id"
   end
 
   create_table "schedules", force: :cascade do |t|

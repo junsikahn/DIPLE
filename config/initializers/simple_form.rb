@@ -187,7 +187,7 @@ SimpleForm.setup do |config|
 
   # You can define a class to use in all item wrappers. Defaulting to none.
   # config.item_wrapper_class = nil
-  config.item_wrapper_class = 'ui checkbox'
+  config.item_wrapper_class = 'ui checkbox field'
 
   # How the label text should be generated altogether with the required text.
   # config.label_text = lambda { |label, required, explicit_label| "#{required} #{label}" }

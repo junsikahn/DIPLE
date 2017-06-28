@@ -1,0 +1,44 @@
+= simple_nested_form_for @admin_problem_collection do |f|
+  = f.error_notification
+
+  table.ui.table
+    thead
+      tr
+        th 입력해주세요
+    tbody
+      tr
+        td = f.input :name
+      tr
+        td = f.input :test_day
+      tr
+        td = f.association :subject
+      tr
+        td = f.association :problem_source
+      = f.simple_fields_for :problems, wrapper: false do |m|
+        tr
+          td
+            div.four.fields
+              = m.hidden_field :id
+              = m.association :subject
+              = m.input :problem_hwp
+              = m.input :answer
+              = m.input :score
+              div.ui.field.one.wide
+                label 제거
+                = m.link_to_remove semantic_icon('trash'), class: 'ui button icon basic fluid'
+      tr
+        td = f.link_to_add '추가', :problems, class: 'ui button basic fluid'
+
+  table.ui.table
+    thead
+      tr
+        th.fourteen.wide 저장하시겠습니까?
+        th.two.wide = f.button :button, '저장'
+
+javascript:
+  $(function(){
+    window.NestedFormEvents.prototype.insertFields = function(content, assoc, link) {
+      var $tr = $(link).closest('tr');
+      return $(content).insertBefore($tr);
+    };
+  });

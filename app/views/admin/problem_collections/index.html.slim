@@ -1,0 +1,30 @@
+table.ui.celled.striped.table
+  thead
+    tr
+      th.center.aligned Name
+      th.center.aligned Total score
+      th.center.aligned Test day
+      th.center.aligned Subject
+      th.center.aligned Problem source
+      th.center.aligned 상세
+      th.center.aligned 편집
+      th.center.aligned 삭제
+
+  tbody
+    - @admin_problem_collections.each do |admin_problem_collection|
+      tr
+        td = admin_problem_collection.name
+        td = admin_problem_collection.total_score
+        td = admin_problem_collection.test_day
+        td = admin_problem_collection.subject_id
+        td = admin_problem_collection.problem_source_id
+        td = link_to 'Show', admin_problem_collection
+        td = link_to 'Edit', edit_admin_problem_collection_path(admin_problem_collection)
+        td = link_to 'Destroy', admin_problem_collection, data: { confirm: 'Are you sure?' }, method: :delete
+  tfoot
+    tr.right.aligned
+      th colspan="20"
+        = paginate @admin_problem_collections, views_prefix: 'admin'
+    tr.right.aligned
+      th colspan="20"
+        = link_to "#{semantic_icon('plus')}추가".html_safe, new_admin_problem_collection_path, class: 'ui positive labeled icon large button'

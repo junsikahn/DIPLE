@@ -2,7 +2,7 @@ class App::Dashboards::OnlineLectureHistoriesController < App::DashboardsControl
   def index
     @online_lecture_histories = OnlineLectureHistory
                                   .includes(online_lecture: :teacher, details: :online_lecture_list)
-                                  .where(match_id: params[:dashboard_id]).original_only.until(@start_date, @end_date)
+                                  .where(match_id: params[:dashboard_id]).original_only.between(@start_date, @end_date)
   end
 
   def new
@@ -21,10 +21,13 @@ class App::Dashboards::OnlineLectureHistoriesController < App::DashboardsControl
   end
 
   def update
-    @original_online_lecture_history = OnlineLectureHistory.find(params[:id])
-    @online_lecture_history = OnlineLectureHistory.find(params[:detail_id])
-    return if @online_lecture_history.update(online_lecture_update_params)
-    render :edit
+    @online_lecture_history = OnlineLectureHistory.find(params[:id])
+    @online_lecture_history_detail = OnlineLectureHistory.find(params[:detail_id])
+    if @online_lecture_history_detail.update(online_lecture_update_params)
+      @online_lecture_history.reload
+    else
+      render :edit
+    end
   end
 
   def list

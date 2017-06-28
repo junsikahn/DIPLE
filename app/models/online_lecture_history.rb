@@ -2,7 +2,7 @@ class OnlineLectureHistory < ApplicationRecord
   attr_accessor :online_provider_id, :online_teacher_id
 
   scope :original_only, (-> { where(online_lecture_history_id: nil) })
-  scope :until, (->(from, to) { where('(completed_at IS NULL AND started_at < ?) OR (completed_at > ? AND started_at < ?)', to, from, to) })
+  scope :between, (->(start_date, end_date) { where('(completed_at IS NULL OR completed_at > ?) AND started_at < ?', start_date, end_date) })
 
   belongs_to :match
   belongs_to :online_lecture, class_name: 'Standard::OnlineLecture'
@@ -71,26 +71,28 @@ class OnlineLectureHistory < ApplicationRecord
       new_list = details.build(online_lecture_history_params)
       new_list.online_lecture_list_id = list.id
       new_list.started_at = nil
-      new_list.planned_at = Time.zone.now + date_offset.day
+      new_list.planned_at = started_at + date_offset.day
     end
   end
 
   def wrap_up_course
     return if online_lecture_history_id.nil?
 
-    if planned_at.nil? && !completed_at.nil?
-      self[:completed_at] = nil
-    end
+    self[:completed_at] = nil if planned_at.nil? && !completed_at.nil?
 
     yield
 
-    if original_history.details.where(completed_at: nil).count.zero?
-      original_history.update_columns(completed_at: original_history.details.pluck(:completed_at).max)
-    else
-      original_history.update_columns(completed_at: nil)
-    end
+    planned_list = original_history.details.select{ |d| !d.planned_at.nil? }.pluck(:planned_at)
+    completed_list = original_history.details.select{ |d| !d.completed_at.nil? }.pluck(:completed_at)
+    completed_yet_list = original_history.details.select{ |d| d.completed_at.nil? }.pluck(:completed_at)
 
-    original_history.update_columns(started_at: original_history.details.select{ |d| !d.planned_at.nil? }.pluck(:planned_at).min,
-                                    planned_at: original_history.details.select{ |d| !d.planned_at.nil? }.pluck(:planned_at).max)
+    date_list = planned_list + completed_list
+    completed_date = completed_yet_list.count.zero? ? completed_list.max : nil
+    min_date = date_list.min
+    max_date = date_list.max
+
+    original_history.update_columns(started_at: min_date,
+                                    planned_at: max_date,
+                                    completed_at: completed_date)
   end
 end

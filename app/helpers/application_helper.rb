@@ -1,11 +1,12 @@
 module ApplicationHelper
   def flash_class(level)
     case level
-    when 'success' then 'ui green message'
-    when 'notice'  then 'ui blue message'
-    when 'error'   then 'ui yellow message'
-    when 'alert'   then 'ui red message'
-    else 'ui message'
+    when 'alert'   then 'alert'     # 흰색
+    when 'success' then 'success'   # 녹색
+    when 'warning' then 'warning'   # 황색
+    when 'error'   then 'error'     # 적색
+    when 'notice'  then 'info'      # 청색
+    else 'alert'
     end
   end
 end

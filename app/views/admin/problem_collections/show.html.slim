@@ -1,0 +1,32 @@
+table.ui.celled.striped.table
+  thead
+    tr
+      th.center.aligned Name
+      th.center.aligned Total score
+      th.center.aligned Test day
+      th.center.aligned Subject
+      th.center.aligned Problem source
+  tbody
+    tr
+      td = @admin_problem_collection.name
+      td = @admin_problem_collection.total_score
+      td = @admin_problem_collection.test_day
+      td = @admin_problem_collection.subject_id
+      td = @admin_problem_collection.problem_source_id
+  tfoot
+    tr.right.aligned
+      th colspan="20"
+        = link_to "#{semantic_icon('edit')}편집".html_safe, edit_admin_problem_collection_path(@admin_problem_collection), class: 'ui positive labeled icon large button'
+
+table.ui.celled.striped.table
+  thead
+    tr
+      th 문제
+      th 정답
+      th 점수
+  tbody
+    - @admin_problem_collection.problems.each do |problem|
+      tr
+        td = problem.problem_hwp
+        td = problem.answer
+        td = problem.score

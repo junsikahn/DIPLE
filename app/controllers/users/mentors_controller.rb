@@ -7,7 +7,7 @@ class Users::MentorsController < ApplicationController
       mentor.save
       flash[:success] = "#{mentor.user.name} 선생님, 매칭이 신청되었습니다. 빠른 시일 내에 디플의 매니징 티쳐가 #{mentor.user.phone_number} 번으로 연락드리겠습니다."
     else
-      flash[:alert] = "#{mentor.user.name} 선생님, 프로필을 먼저 작성해주세요"
+      flash[:error] = "#{mentor.user.name} 선생님, 프로필을 먼저 작성해주세요"
     end
     redirect_back(fallback_location: root_path)
   end
@@ -17,7 +17,7 @@ class Users::MentorsController < ApplicationController
     mentor = current_user.mentor
     mentor.recruited_at = nil
     mentor.save
-    flash[:error] = "#{mentor.user.name} 선생님, 매칭 신청이 취소되었습니다."
+    flash[:warning] = "#{mentor.user.name} 선생님, 매칭 신청이 취소되었습니다."
     redirect_back(fallback_location: root_path)
   end
 end

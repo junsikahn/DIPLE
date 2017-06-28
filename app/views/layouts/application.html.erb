@@ -42,18 +42,6 @@
         </div>
       </header>
 
-      <% flash.each do |key, value| %>
-        <div class="ui modal transition flash-message">
-          <div class="<%= flash_class(key) %> icon">
-            <i class="inbox icon"></i>
-            <i class="close icon"></i>
-            <div class="content">
-              <%= value %>
-            </div>
-          </div>
-        </div>
-      <% end %>
-
       <main class="ui container center-main">
         <%= yield %>
       </main>
@@ -112,9 +100,21 @@
           $('.ui.sidebar').sidebar('toggle');
         });
 
-        $('.flash-message').modal({ blurring: true }).modal('show').find('.close').on('click', function(){
-          $('.flash-message').modal('hide');
-        });
+        <% flash.each do |key, value| %>
+          new Noty({
+            type: '<%= flash_class key %>',
+            text: '<%= value %>',
+            layout: 'bottomRight',
+            theme: 'semanticui',
+            timeout: 5000,
+            progressBar: true,
+            closeWith: ['click', 'button'],
+            animation: {
+              open: 'noty_effects_open',
+              close: 'noty_effects_close'
+            }
+          }).show();
+        <% end %>
       });
     </script>
   </body>

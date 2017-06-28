@@ -1,0 +1,39 @@
+i.close.icon
+div.content
+  div.ui.grid.stackable.divided.test_wrapper
+    div.row.test_wrapper_row
+      div.column.twelve.wide.test_wrapper_left_col
+        div.problems_wrapper
+          = render 'problem_histories', problem_histories: @problem_collection_history.problem_histories
+      div.column.four.wide.test_wrapper_right_col
+        div.answers_wrapper
+          table.ui.table style="width: 100%; height: 100%; border: 0;"
+            tbody
+              tr.top.aligned
+                td
+                  h3 = @problem_collection_history.problem_collection.name
+                  span.ui.label = "#{@problem_collection_history.problem_collection.subject.name}"
+                  span.ui.label = "#{@problem_collection_history.planned_at}"
+                  span.ui.label = "#{@problem_collection_history.problem_collection.total_score}점 만점"
+                  span.ui.label = "문제 #{@problem_collection_history.problem_collection.problems.size}개"
+              tr.bottom.aligned
+                td style="border: 0;"
+                  = simple_nested_form_for @problem_collection_history, url: dashboard_problem_collection_history_path(params[:dashboard_id], @problem_collection_history), remote: true do |f|
+                    = f.error_notification
+                    = f.hidden_field :match_id
+                    div.ui.center.aligned.top.attached.inverted.segment 답안지
+                    div.ui.bottom.attached.segment
+                      table.ui.selectable.table
+                        tbody
+                          = f.simple_fields_for :problem_histories, wrapper: false do |h|
+                            tr
+                              td.two.wide.center.aligned
+                                b = "#{h.index + 1}번"
+                              - 5.times do |index|
+                                td.two.wide.center.aligned.answer_radio data-answer="#{index + 1}"
+                                  a.ui.circular.mini.icon.button class="#{h.object.users_answer == index + 1 ? 'black' : 'basic'}" style="margin: 0; padding: 0; width: 18px; height: 30px; line-height: 30px;" = "#{index + 1}"
+                              = h.hidden_field :match_id
+                              = h.hidden_field :subject_id
+                              = h.hidden_field :problem_collection_id
+                              = h.hidden_field :problem_id
+                              = h.hidden_field :users_answer

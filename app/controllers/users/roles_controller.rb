@@ -12,7 +12,7 @@ class Users::RolesController < ApplicationController
     elsif params[:selection] == 'mentee'
       Mentee.create(user_id: current_user.id)
     end
-    flash[:success] = '매칭을 위해 프로필을 입력해주세요'
+    flash[:alert] = '매칭을 위해 프로필을 입력해주세요'
     redirect_to edit_users_profile_path
   end
 
@@ -23,7 +23,7 @@ class Users::RolesController < ApplicationController
     elsif current_user.mentee?
       Mentee.find_by_user_id(current_user.id).destroy
     end
-    flash[:success] = '유저 롤을 선택해주세요'
+    flash[:alert] = '유저 롤을 선택해주세요'
     redirect_to users_role_path
   end
 

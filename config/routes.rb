@@ -11,6 +11,9 @@ Rails.application.routes.draw do
           get :list, on: :collection
         end
         resources :comments
+        resources :problem_collection_histories, path: :daily_tests
+        resources :problem_histories, path: :problems
+        resources :book_histories, path: :books
       end
     end
   end
@@ -47,7 +50,8 @@ Rails.application.routes.draw do
       # resources :subjects
       resources :matches, :online_lectures
       resources :universities, :majors, :highschools, :banks
-      # rails g scaffold Admin::Major name:string --skip-migration --no-resource-route --template-engine=slim --parent=Standard::Major
+      resources :problem_collections
+      # rails g scaffold Admin::Problem name:string --skip-migration --no-resource-route --template-engine=slim --parent=Standard::Problem
       root 'home#index'
     end
   # end

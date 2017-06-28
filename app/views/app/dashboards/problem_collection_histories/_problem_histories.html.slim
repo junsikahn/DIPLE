@@ -1,0 +1,21 @@
+- half = problem_histories.size.odd? ? problem_histories.size / 2 + 1 : problem_histories.size / 2
+- problem_histories_half = problem_histories.to_a.slice(0, half)
+- problem_histories_last = problem_histories.to_a.slice(half, problem_histories.size)
+
+div.ui.grid.divided.stackable style="margin: 0;"
+  div.eight.wide.column
+    - problem_histories_half.each_with_index do |problem_history, index|
+      div.problem_container
+        p
+          span.ui.circular.label class="#{problem_history.correct? ? 'green' : 'red'}" = "#{index + 1}"
+          = " #{problem_history.problem.problem_hwp} (#{problem_history.problem.score})"
+        = image_tag problem_history.problem.image
+        p = problem_history.users_answer
+  div.eight.wide.column
+    - problem_histories_last.each_with_index do |problem_history, index|
+      div.problem_container
+        p
+          span.ui.circular.label class="#{problem_history.correct? ? 'green' : 'red'}" = "#{problem_histories_half.size + index + 1}"
+          = " #{problem_history.problem.problem_hwp} (#{problem_history.problem.score})"
+        = image_tag problem_history.problem.image
+        p = problem_history.users_answer

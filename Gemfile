@@ -94,6 +94,10 @@ gem 'underscore-rails'
 # an asset gem containing Adam Shaw's excellent fullcalendar jquery plugin
 gem 'fullcalendar-rails'
 gem 'momentjs-rails'
+# Drag and drop so simple it hurts https://bevacqua.github.io/dragula/
+gem 'dragula-rails'
+# NOTY is a notification library that makes it easy to create alert - success - error - warning - information - confirmation messages as an alternative the standard alert dialog.
+gem 'rails-assets-noty', source: 'https://rails-assets.org'
 
 # Rails engine with helpers and JavaScript for displaying times and dates to users in their local time
 gem 'local_time'

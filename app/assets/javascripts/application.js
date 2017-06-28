@@ -16,10 +16,11 @@
 //= require turbolinks
 //= require semantic-ui
 //= require jquery_nested_form
-//= require underscore
 //= require moment
 //= require fullcalendar
 //= require fullcalendar/lang/ko.js
 //= require semantic-ui-calendar
+//= require dragula
+//= require noty
 //= require local_time_ko
 //= require_tree .

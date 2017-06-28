@@ -48,7 +48,7 @@ class User < ApplicationRecord
             numericality: { only_integer: true },
             length: { in: 10..11 }
   validates :agreed_at, presence: { on: :create, allow_blank: true }
-  validates :gender, presence: { on: :update, allow_blank: true }
+  validates :gender, inclusion: { on: :update, in: [true, false] }
   validates :birthday, presence: { on: :update }
   # validates :email,
   #           format: { with: /\A[0-9a-zA-Z\-_.]+@[a-z0-9]+[.][a-zA-Z]{2,3}[.]?[a-z]{0,2}\z/, allow_blank: true }

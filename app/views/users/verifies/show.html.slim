@@ -27,7 +27,7 @@ javascript:
 
     var verifyTimer = setInterval(function() {
       var now = new Date();
-      var dday = new Date('<%= current_user.pin_sent_at + 5 * 60 %>');
+      var dday = new Date("#{current_user.pin_sent_at + 5 * 60}");
 
       var days = (dday - now) / 1000 / 60 / 60 / 24;
       var daysRound = Math.floor(days);

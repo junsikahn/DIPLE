@@ -26,7 +26,7 @@ class Users::ProfilesController < ApplicationController
     respond_to do |format|
       format.html do
         redirect_to users_profile_path and return if current_user.update(profile_params)
-        render :new
+        render :edit
       end
       format.js do
         return if current_user.update(profile_params)
@@ -39,7 +39,7 @@ class Users::ProfilesController < ApplicationController
 
   def redirect_if_role_unselected
     return if current_user.mentor? || current_user.mentee?
-    flash[:success] = '롤을 먼저 선택해주세용'
+    flash[:error] = '롤을 먼저 선택해주세용'
     redirect_to users_role_path
   end
 

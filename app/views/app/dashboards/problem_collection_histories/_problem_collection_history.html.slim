@@ -1,0 +1,14 @@
+tbody id="problem_collection_history_#{problem_collection_history.id}"
+  - tr_class = 'positive' if problem_collection_history.score?
+  - tr_class = 'error' if !problem_collection_history.score? && (problem_collection_history.planned_at < @start_date || problem_collection_history.planned_at < Date.today)
+  tr class="#{tr_class}"
+    td = problem_collection_history.problem_collection.name
+    td = problem_collection_history.planned_at
+    td = problem_collection_history.score.nil? ? '미응시' : "#{problem_collection_history.score}점 / #{problem_collection_history.problem_collection.total_score}점"
+    td.collapsing
+      = link_to "#{semantic_icon('edit')}".html_safe,
+                dashboard_problem_collection_history_path(dashboard_id: params[:dashboard_id],
+                                                          id: problem_collection_history.id,
+                                                          start_date: l(@start_date, format: :date_dash),
+                                                          end_date: l(@end_date, format: :date_dash),
+                                                          format: :js), remote: true, method: :get, class: 'ui basic icon button'

@@ -2,10 +2,13 @@ class CreateStandards < ActiveRecord::Migration[5.0]
   def change
     create_table :subjects do |t|
       t.string     :name,            null: false, unique: true
+      t.string     :path
+      t.integer    :order
+      t.references :subject
     end
     subjects = %w(국어 영어 수학 사회탐구 과학탐구)
     subjects.each do |subject|
-      Standard::Subject.create(name: subject)
+      Standard::Subject.create(name: subject, path: subject, order: 0)
     end
 
     create_table :universities do |t|

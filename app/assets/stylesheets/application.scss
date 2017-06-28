@@ -13,6 +13,8 @@
  *= require_tree .
  *= require fullcalendar
  *= require semantic-ui-calendar
+ *= require dragula
+ *= require noty
  *= require_self
  */
 
@@ -139,3 +141,72 @@ input[type='file'] {
 
 .ui.floated.header { margin-bottom: 0em; }
 .ui.inverted.segment > .ui.header .ui.sub.header { color: #fff; }
+
+.multiline.table > tbody > tr:first-of-type > td {
+  background-color: rgba(0, 0, 50, 0.02) !important;
+}
+
+.multiline.table > tbody:not(:first-of-type) > tr:first-of-type > td {
+  border-top: 1px solid rgba(34, 36, 38, 0.1);
+}
+
+.dragula .item {
+  cursor: move !important;
+  cursor: -webkit-grab !important;
+}
+
+.gu-mirror {
+  cursor: move !important;
+  cursor: -webkit-grabbing !important;
+}
+
+
+#test_form {
+  .problems_wrapper {
+    .problem_container {
+      padding: 1em 0;
+      img { width: 100%; }
+    }
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  #test_form {
+    margin: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden;
+
+    .content {
+      margin: 0 auto;
+      max-width: 1720px !important;
+      height: 100% !important;
+      overflow: hidden;
+
+      .test_wrapper, .test_wrapper_row, .test_wrapper_left_col, .test_wrapper_right_col {
+        height: 100% !important;
+        overflow: hidden;
+        margin: 0 !important;
+      }
+
+      .test_wrapper_left_col {
+        max-width: calc(100% - 360px);
+      }
+      .test_wrapper_right_col {
+        min-width: 360px;
+      }
+
+      .problems_wrapper {
+        height: 100% !important;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .answers_wrapper {
+        height: 100%;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+    }
+  }
+}
