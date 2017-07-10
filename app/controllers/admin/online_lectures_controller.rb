@@ -25,7 +25,7 @@ class Admin::OnlineLecturesController < AdminController
     @admin_online_lecture = Admin::OnlineLecture.new(admin_online_lecture_params)
 
     if @admin_online_lecture.title.blank?
-      @admin_online_lecture.valid_url? && @admin_online_lecture.parse_lists
+      @admin_online_lecture.valid_url? && @admin_online_lecture.parse_lists(admin_online_lecture_params[:subject_id])
       render :new
     elsif @admin_online_lecture.save
       redirect_to @admin_online_lecture
@@ -61,7 +61,7 @@ class Admin::OnlineLecturesController < AdminController
     params
       .fetch(:admin_online_lecture, {})
       .permit(:id, :subject_id, :online_provider_id, :uid, :title, :online_teacher_id, :target, :lecture_count, :is_completed, :package_ids, :is_collected,
-              teacher_attributes: [:id, :online_provider_id, :name, :uid],
+              teacher_attributes: [:id, :subject_id, :online_provider_id, :name, :uid],
               lists_attributes: [:id, :online_lecture_id, :order, :title, :time, :_destroy])
   end
 end

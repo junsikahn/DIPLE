@@ -1,11 +1,11 @@
-div id="problem_collection_history_#{problem_collection_history.id}"
-  small = problem_collection_history.problem_collection.name
-  = link_to dashboard_problem_collection_history_path(dashboard_id: params[:dashboard_id],
-                                                      id: problem_collection_history.id,
-                                                      start_date: start_date,
-                                                      end_date: end_date,
-                                                      format: :js), remote: true, method: :get, class: 'ui basic fluid button'
-    - if problem_collection_history.score.nil?
+div id="problem_collection_#{problem_collection.id}"
+  small = problem_collection.name
+  = link_to new_dashboard_problem_collection_history_path(dashboard_id: params[:dashboard_id],
+                                                          problem_collection_id: problem_collection.id,
+                                                          start_date: start_date,
+                                                          end_date: end_date,
+                                                          format: :js), remote: true, method: :get, class: 'ui basic fluid button'
+    - if score.nil?
        = '시험보기'
     - else
-      = "#{problem_collection_history.score}점 / #{problem_collection_history.problem_collection.total_score}점"
+      = "#{score}점 / #{problem_collection.total_score}점"

@@ -56,5 +56,10 @@ class CreateProfiles < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    Schedule.create(match_id: 1, day_of_week: 2, time_start: '19:00', time_end: '21:00')
+    Schedule.create(match_id: 1, day_of_week: 4, time_start: '20:00', time_end: '22:00')
+    Schedule.create(match_id: 2, day_of_week: 2, time_start: '19:00', time_end: '21:00')
+    Schedule.create(match_id: 2, day_of_week: 4, time_start: '20:00', time_end: '22:00')
   end
 end

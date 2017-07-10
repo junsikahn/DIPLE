@@ -6,7 +6,7 @@ div.content
       = f.error_notification
       = f.simple_fields_for :favored_subjects, wrapper: false do |s|
         div.fields
-          = s.input :subject_id, collection: Standard::Subject.all
+          = s.input :subject_id, collection: Standard::Subject.main_subjects
           = s.hidden_field :user_id, value: current_user.id
           = s.hidden_field :id
           div.ui.field.one.wide

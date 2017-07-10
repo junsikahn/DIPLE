@@ -17,7 +17,8 @@ tbody id="online_lecture_history_#{online_lecture_history.id}"
           = semantic_icon('counterclockwise caret down')
           span.ui.red.circular.floating.mini.label == "#{planned.count}"
     td.six.wide.collapsing
-      small = "#{online_lecture_history.online_lecture.provider_name} / #{online_lecture_history.online_lecture.teacher.name}"
+      span.ui.circular.empty.mini.horizontal.label class="#{online_lecture_history.tag_color}"
+      small = "#{online_lecture_history.online_lecture.subject.name} / #{online_lecture_history.online_lecture.provider_name} / #{online_lecture_history.online_lecture.teacher.name}"
       br
       b = online_lecture_history.online_lecture.title
     td.collapsing.center.aligned
@@ -43,74 +44,27 @@ tbody id="online_lecture_history_#{online_lecture_history.id}"
               thead
                 tr
                   th.center.aligned colspan="4" 목표내역
-              tbody
-                / style="display:block; max-height:200px; overflow:scroll; -webkit-overflow-scrolling: touch"
-                - if planned.blank?
-                  tr
-                    td.center.aligned.disabled colspan="4" 내역이 없습니다
-                - else
-                  - planned.each do |detail|
-                    - tr_class = 'positive' if detail.planned_at.between?(@start_date, @end_date)
-                    - tr_class = 'error' if detail.planned_at < @start_date || detail.planned_at < Date.today
-                    tr class="#{tr_class}"
-                      td.sixteen.wide
-                        span.ui.horizontal.label = detail.online_lecture_list.order_to_s
-                        = detail.online_lecture_list.title
-                      td.collapsing = "#{l detail.planned_at, format: :short} 까지"
-                      td.collapsing
-                        button.ui.positive.icon.button.simple.dropdown
-                          = semantic_icon('check')
-                          div.menu
-                            - if Date.today < @start_date
-                              = link_to "#{'<b>오늘자로 완료처리</b>'}".html_safe,
-                                        dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id],
-                                                                              id: online_lecture_history.id,
-                                                                              detail_id: detail.id,
-                                                                              start_date: l(@start_date, format: :date_dash),
-                                                                              end_date: l(@end_date, format: :date_dash),
-                                                                              completed_at: Date.today), remote: true, method: :patch, class: 'item', data: { tooltip: '완료 처리', position: 'right center' }
-                              div.divider
-                            - period_count = (@end_date.to_date - @start_date.to_date).to_i + 1
-                            - period_count.times do |offset|
-                              - date = @start_date.to_date + offset.day
-                              = link_to "#{date == Date.today ? '오늘' : l(date, format: :short)}".html_safe,
-                                        dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id],
-                                                                              id: online_lecture_history.id,
-                                                                              detail_id: detail.id,
-                                                                              start_date: l(@start_date, format: :date_dash),
-                                                                              end_date: l(@end_date, format: :date_dash),
-                                                                              completed_at: date), remote: true, method: :patch, class: "item #{'disabled' if date > Date.today}", data: { tooltip: '완료 처리', position: 'right center' }
-                            - if Date.today > @end_date
-                              div.divider
-                              = link_to "#{'<b>오늘자로 완료처리</b>'}".html_safe,
-                                        dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id],
-                                                                              id: online_lecture_history.id,
-                                                                              detail_id: detail.id,
-                                                                              start_date: l(@start_date, format: :date_dash),
-                                                                              end_date: l(@end_date, format: :date_dash),
-                                                                              completed_at: Date.today), remote: true, method: :patch, class: 'item', data: { tooltip: '완료 처리', position: 'right center' }
+              tbody.dashboard-table empty="내역이 없습니다"
+                - planned.each do |detail|
+                  - tr_class = 'positive' if detail.planned_at.between?(@start_date, @end_date)
+                  - tr_class = 'error' if detail.planned_at < @start_date || detail.planned_at < Date.today
+                  tr class="#{tr_class}"
+                    td.sixteen.wide
+                      span.ui.horizontal.label = detail.online_lecture_list.order_to_s
+                      = detail.online_lecture_list.title
+                    td.collapsing = "#{l detail.planned_at, format: :short} 까지"
           div.column
             table.ui.table
               thead
                 tr
                   th.center.aligned colspan="4" 완료내역
-              tbody
-                - if completed_now.blank?
-                  tr
-                    td.center.aligned.disabled colspan="4" 내역이 없습니다
-                - else
-                  - completed_now.each do |detail|
-                    - tr_class = 'positive' if detail.completed_at.between?(@start_date, @end_date)
-                    tr class="#{tr_class}"
-                      td.sixteen.wide
-                        span.ui.horizontal.label = detail.online_lecture_list.order_to_s
-                        = detail.online_lecture_list.title
-                      td.collapsing = "#{l detail.completed_at, format: :short} 완료"
-                      td.collapsing
-                        = link_to "#{semantic_icon('remove')}".html_safe,
-                                  dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id],
-                                                                        id: online_lecture_history.id,
-                                                                        detail_id: detail.id,
-                                                                        start_date: l(@start_date, format: :date_dash),
-                                                                        end_date: l(@end_date, format: :date_dash),
-                                                                        completed_at: false), remote: true, method: :patch, class: 'ui basic icon button', data: { tooltip: '완료 취소', position: 'right center' }
+              tbody.dashboard-table empty="내역이 없습니다"
+                - completed_now.each do |detail|
+                  - tr_class = 'positive' if detail.completed_at.between?(@start_date, @end_date)
+                  tr class="#{tr_class}"
+                    td.sixteen.wide
+                      span.ui.horizontal.label = detail.online_lecture_list.order_to_s
+                      = detail.online_lecture_list.title
+                    td.collapsing = "#{l detail.completed_at, format: :short} 완료"
+                    td.collapsing
+                      div.ui.star.rating data-rating="#{detail.rating}" data-max-rating="3" data-id="#{detail.id}"

@@ -5,15 +5,20 @@ Rails.application.routes.draw do
     # namespace :matches, path: :dashboards, as: :dashboards do
     #   resources :online_lectures
     # end
-    resources :dashboards, only: [:index, :show] do
+    resources :dashboards, only: [:index, :show, :update] do
       scope module: :dashboards do
-        resources :online_lecture_histories, path: :online_lectures do
+        resources :problem_collection_histories, path: :problem_collections, only: [:index, :new, :create]
+        resources :online_lecture_histories, path: :online_lectures, only: [:index, :new, :create, :edit, :update] do
           get :list, on: :collection
+          patch :change_period, on: :member
+          patch :rating, on: :member
+        end
+        resources :book_histories, path: :books do
+          get :list, on: :collection
+          patch :change_period, on: :member
+          patch :rating, on: :member
         end
         resources :comments
-        resources :problem_collection_histories, path: :daily_tests
-        resources :problem_histories, path: :problems
-        resources :book_histories, path: :books
       end
     end
   end
@@ -47,11 +52,21 @@ Rails.application.routes.draw do
       # resources :users
       # resources :mentors
       # resources :mentees
-      # resources :subjects
+      resources :subjects
       resources :matches, :online_lectures
       resources :universities, :majors, :highschools, :banks
-      resources :problem_collections
-      # rails g scaffold Admin::Problem name:string --skip-migration --no-resource-route --template-engine=slim --parent=Standard::Problem
+      resources :problem_collections do
+        patch :publish, on: :member
+        resources :problems, controller: :problem_collection_problems do
+          get :list, on: :collection
+        end
+        resources :problem_sets, controller: :problem_collection_problem_sets do
+          get :list, on: :collection
+        end
+      end
+      resources :problems
+      resources :books
+      # rails g scaffold Admin::User  --skip-migration --no-resource-route --template-engine=slim --parent=User
       root 'home#index'
     end
   # end

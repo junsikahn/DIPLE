@@ -74,9 +74,10 @@ GEM
       rails (>= 3.0.4)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
-    dragula-rails (3.7.0)
-      railties (>= 3.1)
     erubis (2.7.0)
+    exception_notification (4.2.1)
+      actionmailer (>= 4.0, < 6)
+      activesupport (>= 4.0, < 6)
     execjs (2.7.0)
     ffi (1.9.18)
     figaro (1.1.1)
@@ -175,6 +176,8 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 5.0.3)
       sprockets-rails (>= 2.0.0)
+    rails-assets-dragula (3.7.2)
+    rails-assets-katex (0.7.1)
     rails-assets-noty (3.1.0)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
@@ -210,6 +213,7 @@ GEM
     simple_form (3.2.1)
       actionpack (> 4, < 5.1)
       activemodel (> 4, < 5.1)
+    slack-notifier (2.2.2)
     slim (3.0.8)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 1.3.3, < 2.1)
@@ -265,7 +269,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   devise
   devise_lastseenable
-  dragula-rails
+  exception_notification
   figaro
   fullcalendar-rails
   jbuilder (~> 2.5)
@@ -283,6 +287,8 @@ DEPENDENCIES
   public_suffix
   puma (~> 3.0)
   rails (~> 5.0.3)
+  rails-assets-dragula!
+  rails-assets-katex!
   rails-assets-noty!
   redis (~> 3.0)
   remotipart
@@ -290,6 +296,7 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   semantic-ui-sass
   simple_form
+  slack-notifier
   slim
   spring
   spring-watcher-listen (~> 2.0.0)

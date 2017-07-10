@@ -61,7 +61,7 @@ class Admin::OnlineLecture < Standard::OnlineLecture
     errors.blank?
   end
 
-  def parse_lists
+  def parse_lists(subject_id)
     begin
       agent = Mechanize.new do |a|
         a.user_agent_alias = 'Windows IE 10'
@@ -256,7 +256,7 @@ class Admin::OnlineLecture < Standard::OnlineLecture
 
       self.title = lecture_title
       self.target = target_array.sort.reverse.join('/')
-      self.teacher = Standard::OnlineTeacher.find_or_create_by(uid: teacher_uid, online_provider_id: online_provider_id) { |t| t.name = teacher_name }
+      self.teacher = Standard::OnlineTeacher.find_or_create_by(uid: teacher_uid, online_provider_id: online_provider_id, subject_id: subject_id, name: teacher_name)
       self.lecture_count = lecture_count
       self.is_completed = is_completed
       return true

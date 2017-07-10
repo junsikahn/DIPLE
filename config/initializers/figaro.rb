@@ -1,1 +1,3 @@
-Spring.watch 'config/application.yml'
+if Rails.env == 'development'
+  Spring.watch 'config/application.yml'
+end

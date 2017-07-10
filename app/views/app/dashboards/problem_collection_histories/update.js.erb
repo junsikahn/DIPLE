@@ -1,5 +1,0 @@
-$(function(){
-  $('#test_form').empty().modal('hide');
-
-  $('#problem_collection_history_<%= @problem_collection_history.id %>').html("<%= escape_javascript(render 'calendar_item', problem_collection_history: @problem_collection_history, start_date: params[:start_date], end_date: params[:end_date]) %>");
-});

@@ -9,7 +9,7 @@ class AdminController < ActionController::Base
   private
 
   def authenticate_admin!
-    return if user_signed_in? && current_user.id == 1
+    return if user_signed_in? && ![1,2].index(current_user.id).nil?
     redirect_to root_path
   end
 

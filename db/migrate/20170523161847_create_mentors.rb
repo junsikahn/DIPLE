@@ -13,5 +13,8 @@ class CreateMentors < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    Mentor.create(user_id: 1, self_introduction: '안녕하세요', recruited_at: Time.zone.now, interviewed_at: Time.zone.now, authorized_at: Time.zone.now)
+    Mentor.create(user_id: 2, self_introduction: '안녕하세요', recruited_at: Time.zone.now, interviewed_at: Time.zone.now, authorized_at: Time.zone.now)
   end
 end

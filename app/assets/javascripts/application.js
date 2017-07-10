@@ -22,5 +22,7 @@
 //= require semantic-ui-calendar
 //= require dragula
 //= require noty
+//= require katex
+//= require katex/contrib/auto-render.min
 //= require local_time_ko
 //= require_tree .

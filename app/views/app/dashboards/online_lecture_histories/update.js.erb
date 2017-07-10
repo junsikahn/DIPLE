@@ -1,6 +1,6 @@
 $(function(){
   var target_div = $('#online_lecture_history_' + '<%= @online_lecture_history.id %>');
-  target_div.replaceWith("<%= escape_javascript(render(@online_lecture_history)) %>");
+  target_div.replaceWith("<%= escape_javascript(render @online_lecture_history) %>");
   var replaced_div = $('#online_lecture_history_' + '<%= @online_lecture_history.id %>');
   replaced_div.find('.ui.progress').progress();
   replaced_div.find('.button.collapse').on('click', function(e){
@@ -9,9 +9,14 @@ $(function(){
       icon.toggleClass('rotated');
     });
   });
-
-  if ($('#online_lecture_form').hasClass('active')) {
-    var edit_url = '<%== edit_dashboard_online_lecture_history_path(dashboard_id: params[:dashboard_id], id: params[:id], start_date: params[:start_date], end_date: params[:end_date], format: :js) %>';
-    $.ajax({ url: edit_url });
-  }
+  replaced_div.find('.ui.rating').rating({
+    onRate: function(value) {
+      $.ajax({
+        url: '<%= dashboard_online_lecture_histories_path(dashboard_id: params[:dashboard_id]) %>/' + $(this).data('id') +'/rating',
+        data: {rating: value},
+        dataType: 'script',
+        type: 'PATCH'
+      })
+    }
+  });
 });

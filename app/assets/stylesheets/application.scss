@@ -15,6 +15,7 @@
  *= require semantic-ui-calendar
  *= require dragula
  *= require noty
+ *= require katex
  *= require_self
  */
 
@@ -91,11 +92,18 @@
 }
 
 .top-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   padding: 1rem 0;
   border-bottom: 1px solid #f2f6f9;
+  background-color: #fff;
+  z-index: 10;
 }
 .center-main {
-  margin: 2em 0 5em 0;
+  min-height: 100vh;
+  padding: 7em 0 5em 0;
 }
 .bottom-footer {
   margin: 5em 0 0 !important;
@@ -141,71 +149,77 @@ input[type='file'] {
 
 .ui.floated.header { margin-bottom: 0em; }
 .ui.inverted.segment > .ui.header .ui.sub.header { color: #fff; }
-
-.multiline.table > tbody > tr:first-of-type > td {
-  background-color: rgba(0, 0, 50, 0.02) !important;
+.ui.modal > .header:first-of-type {
+  border-top-left-radius: 0.28571429rem;
+  border-top-right-radius: 0.28571429rem;
 }
 
-.multiline.table > tbody:not(:first-of-type) > tr:first-of-type > td {
-  border-top: 1px solid rgba(34, 36, 38, 0.1);
+#test_screen {
+  margin: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden;
 }
-
-.dragula .item {
-  cursor: move !important;
-  cursor: -webkit-grab !important;
-}
-
-.gu-mirror {
-  cursor: move !important;
-  cursor: -webkit-grabbing !important;
-}
-
-
-#test_form {
-  .problems_wrapper {
-    .problem_container {
-      padding: 1em 0;
-      img { width: 100%; }
+#test_screen > .content {
+  height: 100% !important; padding: 20px !important;
+  .test_wrapper { max-width: 1442px; margin: 0 auto; height: 100%; overflow: hidden; border: 1px solid lightgrey; border-radius: .3em;
+    .problems_header { height: 50px; overflow: scroll; border-top: 0; }
+    .problems_wrapper, .answers_wrapper { position: relative; display: inline-block; height: 100%; vertical-align: top; overflow: hidden; }
+    .problems_wrapper { width: 75%; box-shadow: 1px 0 lightgrey;
+      // .problems_row { height: calc(100% - 50px); overflow: scroll; -webkit-overflow-scrolling: touch; }
+      // .problems_row_divider { position: absolute; top: 50px; left: 50%; width: 1px; height: calc(100% - 50px); background: lightgrey;}
+      // .problems_column { display: inline-block; width: 50%; min-height: 100%; padding: 20px; vertical-align: top;
+      //   .problem_container { padding-bottom: 40px; }
+      //   .problem_container:last-of-type { padding-bottom: 0; }
+      // }
+      .problems_seg { width: 100%; height: calc(100% - 50px); overflow: hidden; }
+      .problems_row { min-width: 100%; height: 100%; }
+      .problems_row_divider { display: inline-block; float: left; width: 1px; height: 100%; margin-left: -1px; background: lightgrey;}
+      .problems_column { display: inline-block; float: left; width: 540px; padding: 20px; vertical-align: top; }
+    }
+    .answers_wrapper { width: 25%; box-shadow: -1px 0 lightgrey;
+      .answers_seg { height: calc(100% - 100px); overflow: scroll; -webkit-overflow-scrolling: touch; }
+      .answer_radio .button { margin: 0; padding: 0; width: 18px; height: 30px; line-height: 30px; }
+      .answer_input { padding-right: 0.8em !important; }
+      .submit.button, .answers_score { height: 50px; }
     }
   }
 }
 
-@media only screen and (min-width: 768px) {
-  #test_form {
-    margin: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    overflow: hidden;
+.problem_container { padding-bottom: 40px; }
+.problem_container:last-of-type { padding-bottom: 0; }
+.problem_container img { max-width: 100%; }
+.problem_seg { overflow-x: scroll; overflow-y: hidden; }
 
-    .content {
-      margin: 0 auto;
-      max-width: 1720px !important;
-      height: 100% !important;
-      overflow: hidden;
-
-      .test_wrapper, .test_wrapper_row, .test_wrapper_left_col, .test_wrapper_right_col {
-        height: 100% !important;
-        overflow: hidden;
-        margin: 0 !important;
+@media only screen and (min-width: 769px) and (max-width: 1480px) {
+  #test_screen {
+    .test_wrapper { max-width: 900px !important;
+      .problems_wrapper { width: 60% !important;
+        .problems_seg { overflow-y: scroll; -webkit-overflow-scrolling: touch; }
+        .problems_row_divider { display: none; }
+        .problems_column { width: 100% !important; min-height: initial !important; }
       }
+      .answers_wrapper { width: 40% !important; }
+    }
+  }
+}
 
-      .test_wrapper_left_col {
-        max-width: calc(100% - 360px);
+@media only screen and (max-width: 768px) {
+  #test_screen {
+    .test_wrapper { max-width: 900px !important;
+      .problems_wrapper { width: 100% !important; height: 70% !important;
+        .problems_header .ui.labels { display: none; }
+        .problems_row_divider { display: none; }
+        .problems_column { width: 100% !important; min-height: initial !important; }
       }
-      .test_wrapper_right_col {
-        min-width: 360px;
-      }
-
-      .problems_wrapper {
-        height: 100% !important;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .answers_wrapper {
-        height: 100%;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
+      .answers_wrapper { width: 100% !important; height: 30% !important; border-top: 1px dotted lightgrey;
+        form { overflow: scroll; -webkit-overflow-scrolling: touch; }
+        .problems_header { display: none; }
+        .answers_seg { height: initial !important; min-height: calc(100% - 50px); overflow: hidden !important; border: 0; margin: 0; width: 100%;
+          tbody { display: table-row-group !important; }
+          tr { display: table-row !important; }
+          td { display: table-cell !important; padding-top: 20px 0 !important; padding-bottom: 20px 0 !important; }
+        }
       }
     }
   }

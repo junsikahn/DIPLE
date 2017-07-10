@@ -1,16 +1,7 @@
 $(function(){
-  $('#online_lecture_form').empty().modal('hide');
-
-  <% if @online_lecture_history.started_at < @end_date %>
-    var target_div = $('#online_lecture_histories_list');
-    target_div.find('.empty_list').remove();
-    var added_div = target_div.append("<%= escape_javascript(render(@online_lecture_history) || render('empty')) %>");
-    added_div.find('.ui.progress').progress();
-    added_div.find('.button.collapse').on('click', function(e){
-      var icon = $(this).find('i');
-      $(this).parentsUntil('tbody', this).next('tr').transition('slide', 150, function(){
-        icon.toggleClass('rotated');
-      });
-    });
-  <% end %>
+  var form = $('#online_lecture_form');
+  form.modal('hide');
+  $.ajax({
+    url: '<%== dashboard_online_lecture_histories_path(dashboard_id: params[:dashboard_id], start_date: params[:start_date], end_date: params[:end_date], format: :js) %>'
+  });
 });

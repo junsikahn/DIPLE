@@ -1,6 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
-  before_action :configure_account_update_params, only: [:update]
+  # before_action :configure_account_update_params, only: [:update]
   skip_before_action :redirect_if_unverified
 
   # GET /resource/sign_up
@@ -21,7 +21,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
     if resource.persisted?
       set_flash_message! :notice, :"signed_up_but_#{resource.inactive_message}"
       sign_up(resource_name, resource)
-      SendPinJob.perform_later(current_user)
       respond_with resource, location: after_inactive_sign_up_path_for
     else
       clean_up_passwords resource

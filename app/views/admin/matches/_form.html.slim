@@ -7,9 +7,9 @@
         th 입력해주세요
     tbody
       tr
-        td = f.association :mentor
+        td = f.input :mentor_id, as: :select, collection: Mentor.includes(:user).where.not(authorized_at: nil).collect { |mentor| [mentor.user.name, mentor.id]  }
       tr
-        td = f.association :mentee
+        td = f.input :mentee_id, as: :select, collection: Mentee.includes(:user).all.collect { |mentee| [mentee.user.name, mentee.id]  }
       = f.simple_fields_for :schedules, wrapper: false do |s|
         tr
           td
@@ -48,8 +48,8 @@
   table.ui.table
     thead
       tr
-        th.fourteen.wide 저장하시겠습니까?
-        th.two.wide = f.button :button, '저장'
+        th.sixteen.wide 저장하시겠습니까?
+        th.collapsing = f.button :button, '저장'
 
 javascript:
   $(function(){
@@ -77,4 +77,16 @@ javascript:
         startCalendar: startCalendar
       });
     });
+
+    $(document)
+      .off('nested:fieldAdded')
+      .off('nested:fieldRemoved')
+      .on('nested:fieldAdded', function(event){
+        var field = event.field;
+        var dropdownFields = field.find('select.select');
+        dropdownFields.dropdown();
+      })
+      .on('nested:fieldRemoved', function(event){
+        $(event.target).closest('tr').hide();
+      });
   });

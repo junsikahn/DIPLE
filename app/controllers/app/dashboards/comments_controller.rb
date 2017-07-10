@@ -1,5 +1,5 @@
 class App::Dashboards::CommentsController < App::DashboardsController
-  before_action :set_date_params, only: [:index]
+  before_action :set_date_params
 
   def index
     @comments = Comment.includes(:user, :subject, :reply_comments).where(match_id: params[:dashboard_id]).original_only.until(@start_date, @end_date)

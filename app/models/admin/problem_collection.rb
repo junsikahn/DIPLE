@@ -1,7 +1,3 @@
 class Admin::ProblemCollection < Standard::ProblemCollection
-  validate :scoring
-
-  def scoring
-    self[:total_score] = problems.map(&:score).sum
-  end
+  has_many :admin_problems, class_name: 'Admin::Problem', through: :problem_collection_to_problems, source: :problem
 end

@@ -3,12 +3,16 @@ table.ui.celled.striped.table
     tr
       td = link_to '매치', admin_matches_path
     tr
-      td = link_to '온라인강의', admin_online_lectures_path
+      td = link_to '문제 모음 등록', admin_problem_collections_path
     tr
-      td = link_to '문제 모음', admin_problem_collections_path
+      td = link_to '온라인강의 등록', admin_online_lectures_path
+    tr
+      td = link_to '교재 등록', admin_books_path
 
 table.ui.celled.striped.table
   tbody
+    tr
+      td = link_to '과목 관리', admin_subjects_path
     tr
       td = link_to '대학교', admin_universities_path
     tr

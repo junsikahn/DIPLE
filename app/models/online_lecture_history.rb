@@ -1,5 +1,5 @@
 class OnlineLectureHistory < ApplicationRecord
-  attr_accessor :online_provider_id, :online_teacher_id
+  attr_accessor :subject_id, :online_provider_id, :online_teacher_id
 
   scope :original_only, (-> { where(online_lecture_history_id: nil) })
   scope :between, (->(start_date, end_date) { where('(completed_at IS NULL OR completed_at > ?) AND started_at < ?', start_date, end_date) })
@@ -67,7 +67,7 @@ class OnlineLectureHistory < ApplicationRecord
     online_lecture = Standard::OnlineLecture.includes(:lists).find(online_lecture_id)
     total_count = online_lecture.lists.size
     online_lecture.lists.each_with_index do |list, index|
-      date_offset = ((index + 1) * (planned_at - started_at).to_f / total_count.to_f).ceil
+      date_offset = ((index + 1) * (planned_at - started_at).to_f / total_count.to_f).floor
       new_list = details.build(online_lecture_history_params)
       new_list.online_lecture_list_id = list.id
       new_list.started_at = nil
@@ -76,23 +76,32 @@ class OnlineLectureHistory < ApplicationRecord
   end
 
   def wrap_up_course
-    return if online_lecture_history_id.nil?
+    if online_lecture_history_id.nil?
+      list = details
+      planned_list = list.select{ |d| !d.planned_at.nil? }.pluck(:planned_at)
+      completed_list = list.select{ |d| !d.completed_at.nil? }.pluck(:completed_at)
 
-    self[:completed_at] = nil if planned_at.nil? && !completed_at.nil?
+      date_list = planned_list + completed_list
+      date_list << started_at
+      date_list << planned_at
+      min_date = date_list.min
+      max_date = date_list.max
+
+      self[:started_at] = min_date
+      self[:planned_at] = max_date
+    else
+      self[:completed_at] = nil if planned_at.nil? && !completed_at.nil?
+    end
 
     yield
 
-    planned_list = original_history.details.select{ |d| !d.planned_at.nil? }.pluck(:planned_at)
-    completed_list = original_history.details.select{ |d| !d.completed_at.nil? }.pluck(:completed_at)
-    completed_yet_list = original_history.details.select{ |d| d.completed_at.nil? }.pluck(:completed_at)
-
-    date_list = planned_list + completed_list
-    completed_date = completed_yet_list.count.zero? ? completed_list.max : nil
-    min_date = date_list.min
-    max_date = date_list.max
-
-    original_history.update_columns(started_at: min_date,
-                                    planned_at: max_date,
-                                    completed_at: completed_date)
+    if online_lecture_history_id.nil?
+    else
+      list = original_history.details
+      completed_list = list.select{ |d| !d.completed_at.nil? }.pluck(:completed_at)
+      completed_yet_count = list.select{ |d| d.completed_at.nil? }.count
+      completed_date = completed_yet_count.zero? ? completed_list.max : nil
+      original_history.update_columns(completed_at: completed_date)
+    end
   end
 end

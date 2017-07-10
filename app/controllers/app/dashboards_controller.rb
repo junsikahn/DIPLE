@@ -1,5 +1,5 @@
 class App::DashboardsController < ApplicationController
-  before_action :set_date_params
+  before_action :set_date_params, only: :show
 
   def index
     if current_user.mentor?
@@ -29,9 +29,15 @@ class App::DashboardsController < ApplicationController
     end
   end
 
+  def update
+    @match = Match.find_by(params[:id])
+    return if @match.update(match_params)
+  end
+
   private
 
   def set_date_params
+    match = params[:dashboard_id].nil? ? Match.find(params[:id]) : Match.find(params[:dashboard_id])
     @start_date =
       begin
         Time.zone.parse(params[:start_date]).beginning_of_day
@@ -44,6 +50,13 @@ class App::DashboardsController < ApplicationController
       rescue
         Time.zone.now.end_of_week
       end
-    @end_date = @start_date.advance(days: 6).end_of_day if @start_date > @end_date
+    @start_date = match.created_at.beginning_of_day if match.created_at > @start_date
+    @end_date = @start_date.end_of_week if @start_date > @end_date
+  end
+
+  def match_params
+    params
+      .fetch(:match, {})
+      .permit(:study, :school, :history, :korean, :english, :math)
   end
 end

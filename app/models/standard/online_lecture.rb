@@ -6,6 +6,8 @@ class Standard::OnlineLecture < ApplicationRecord
   has_many :lists, class_name: 'OnlineLectureList', foreign_key: 'online_lecture_id', dependent: :destroy, inverse_of: :online_lecture
   accepts_nested_attributes_for :lists, allow_destroy: true
 
+  has_many :online_lecture_histories, dependent: :destroy
+
   validates :uid, presence: true, uniqueness: true
   validates :title, presence: true
   validates :online_provider_id, presence: true

@@ -1,3 +1,5 @@
+div#user_form.ui.modal.transition
+
 div.ui.attached.message
   div.header 마이페이지
   p 프로필을 업데이트하세요
@@ -84,5 +86,3 @@ div.ui.warning.message
   = link_to "#{semantic_icon('remove user')} 회원탈퇴".html_safe, user_registration_path, method: :delete
 div.ui.warning.message
   = link_to "#{semantic_icon('sign out')} 로그아웃".html_safe, destroy_user_session_path, method: :delete
-
-div#user_form.ui.modal.transition

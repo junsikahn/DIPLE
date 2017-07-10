@@ -31,5 +31,21 @@ module DIPLE
     end
 
     config.action_view.embed_authenticity_token_in_remote_forms = true
+
+    config.middleware.use ExceptionNotification::Rack,
+                          email: {
+                            # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
+                            deliver_with: :deliver_now,
+                            email_prefix: '[Server ERROR] ',
+                            sender_address: %("Server ERROR" <notice@vaskit.kr>),
+                            exception_recipients: ['junsikahn@vaskit.kr', 'sunghomoon@vaskit.kr']
+                          }
+    #                       slack: {
+    #                         webhook_url: "https://hooks.slack.com/services/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",
+    #                         channel: '#test',
+    #                         additional_parameters: {
+    #                           mrkdwn: true
+    #                         }
+    #                       }
   end
 end

@@ -8,6 +8,8 @@ class CreateMatchHistories < ActiveRecord::Migration[5.0]
       t.date       :planned_at
       t.date       :completed_at
       t.references :online_lecture_history
+      t.string     :tag_color
+      t.integer    :rating
       t.timestamps
     end
 
@@ -36,7 +38,7 @@ class CreateMatchHistories < ActiveRecord::Migration[5.0]
       t.references :problem_collection,  null: false
       t.references :problem,             null: false
       t.references :problem_collection_history
-      t.integer    :users_answer
+      t.string     :users_answer
       t.boolean    :correct
       t.boolean    :check
       t.attachment :comment_image
@@ -53,7 +55,9 @@ class CreateMatchHistories < ActiveRecord::Migration[5.0]
       t.integer    :start_page
       t.integer    :planned_page
       t.integer    :completed_page
-      t.references :online_lecture_history
+      t.references :book_history
+      t.string     :tag_color
+      t.integer    :rating
       t.timestamps
     end
   end

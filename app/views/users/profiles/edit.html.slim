@@ -1,3 +1,5 @@
+div#user_form.ui.modal.transition
+
 = render '/users/step', step: 4
 div.ui.attached.segment
   = simple_form_for current_user, url: users_profile_path do |f|
@@ -36,8 +38,6 @@ div.ui.attached.segment
 
 div.ui.bottom.attached.warning.message
   = link_to "#{semantic_icon('help')} 역할을 다시 선택하시려면 이곳을 누르세요".html_safe, users_role_path, method: :delete
-
-div#user_form.ui.modal.transition
 
 javascript:
   $(function() {

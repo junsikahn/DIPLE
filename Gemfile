@@ -62,6 +62,11 @@ gem 'slim'
 # Simple Rails app configuration
 gem 'figaro'
 
+# Exception Notifier Plugin for Rails
+gem 'exception_notification'
+# A simple wrapper for posting to slack channels
+gem 'slack-notifier'
+
 # Flexible authentication solution for Rails with Warden
 gem 'devise'
 gem 'devise_lastseenable'
@@ -94,10 +99,15 @@ gem 'underscore-rails'
 # an asset gem containing Adam Shaw's excellent fullcalendar jquery plugin
 gem 'fullcalendar-rails'
 gem 'momentjs-rails'
-# Drag and drop so simple it hurts https://bevacqua.github.io/dragula/
-gem 'dragula-rails'
-# NOTY is a notification library that makes it easy to create alert - success - error - warning - information - confirmation messages as an alternative the standard alert dialog.
-gem 'rails-assets-noty', source: 'https://rails-assets.org'
+
+source 'https://rails-assets.org' do
+  # Drag and drop so simple it hurts https://bevacqua.github.io/dragula/
+  gem 'rails-assets-dragula'
+  # NOTY is a notification library that makes it easy to create alert - success - error - warning - information - confirmation messages as an alternative the standard alert dialog.
+  gem 'rails-assets-noty'
+  # Fast math typesetting for the web. https://khan.github.io/KaTeX/
+  gem 'rails-assets-katex'
+end
 
 # Rails engine with helpers and JavaScript for displaying times and dates to users in their local time
 gem 'local_time'

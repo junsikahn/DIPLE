@@ -7,7 +7,7 @@
         th 입력해주세요
     tbody
       tr
-        td = f.association :subject
+        td = f.association :subject, collection: Standard::Subject.main_subjects
       tr
         td = f.input :uid, as: :url
 
@@ -45,7 +45,8 @@
                 = t.hidden_field :id
                 = t.hidden_field :uid
                 = t.input :online_provider_id, wrapper: :ui_select, as: :select, collection: Standard::OnlineProvider.all.collect { |provider| [provider.name, provider.id] }, wrapper_html: { class: 'four wide' }
-                = t.input :name, wrapper_html: { class: 'twelve wide' }
+                = t.input :subject_id, wrapper: :ui_select, as: :select, collection: Standard::Subject.main_subjects, wrapper_html: { class: 'four wide' }
+                = t.input :name, wrapper_html: { class: 'eight wide' }
 
   - unless @admin_online_lecture.title.blank?
     table.ui.celled.striped.table
@@ -70,13 +71,13 @@
   table.ui.table
     thead
       tr
-        th.fourteen.wide 저장하시겠습니까?
-        th.two.wide = f.button :button, '저장'
+        th.sixteen.wide 저장하시겠습니까?
+        th.collapsing = f.button :button, '저장'
 
 
 javascript:
   $(function(){
-    $("#admin_online_lecture_subject_id, #admin_online_lecture_online_provider_id, #admin_online_lecture_is_completed, #admin_online_lecture_teacher_attributes_online_provider_id").dropdown();
+    $('select').dropdown();
     window.NestedFormEvents.prototype.insertFields = function(content, assoc, link) {
       var $tr = $(link).closest('tr');
       return $(content).insertBefore($tr);

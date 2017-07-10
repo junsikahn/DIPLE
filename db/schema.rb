@@ -17,8 +17,8 @@ ActiveRecord::Schema.define(version: 20170623210652) do
   end
 
   create_table "book_histories", force: :cascade do |t|
-    t.integer  "match_id",                  null: false
-    t.integer  "book_id",                   null: false
+    t.integer  "match_id",        null: false
+    t.integer  "book_id",         null: false
     t.integer  "book_unit_id"
     t.date     "started_at"
     t.date     "planned_at"
@@ -26,33 +26,40 @@ ActiveRecord::Schema.define(version: 20170623210652) do
     t.integer  "start_page"
     t.integer  "planned_page"
     t.integer  "completed_page"
-    t.integer  "online_lecture_history_id"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.integer  "book_history_id"
+    t.string   "tag_color"
+    t.integer  "rating"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["book_history_id"], name: "index_book_histories_on_book_history_id"
     t.index ["book_id"], name: "index_book_histories_on_book_id"
     t.index ["book_unit_id"], name: "index_book_histories_on_book_unit_id"
     t.index ["match_id"], name: "index_book_histories_on_match_id"
-    t.index ["online_lecture_history_id"], name: "index_book_histories_on_online_lecture_history_id"
+  end
+
+  create_table "book_publishers", force: :cascade do |t|
+    t.string "name", null: false
   end
 
   create_table "book_units", force: :cascade do |t|
-    t.integer "subject_id", null: false
-    t.integer "book_id",    null: false
+    t.integer "subject_id",             null: false
+    t.integer "book_id",                null: false
+    t.integer "order"
+    t.integer "depth",      default: 0
     t.string  "name"
     t.integer "page"
-    t.integer "order"
-    t.integer "depth"
     t.index ["book_id"], name: "index_book_units_on_book_id"
     t.index ["subject_id"], name: "index_book_units_on_subject_id"
   end
 
   create_table "books", force: :cascade do |t|
-    t.integer "subject_id",   null: false
+    t.integer "subject_id",        null: false
+    t.integer "book_publisher_id", null: false
     t.string  "name"
-    t.integer "total_page"
     t.string  "series"
-    t.string  "publisher"
+    t.integer "total_page"
     t.date    "published_at"
+    t.index ["book_publisher_id"], name: "index_books_on_book_publisher_id"
     t.index ["subject_id"], name: "index_books_on_subject_id"
   end
 
@@ -132,6 +139,12 @@ ActiveRecord::Schema.define(version: 20170623210652) do
   create_table "matches", force: :cascade do |t|
     t.integer  "mentor_id",  null: false
     t.integer  "mentee_id",  null: false
+    t.text     "study"
+    t.text     "school"
+    t.text     "history"
+    t.text     "korean"
+    t.text     "english"
+    t.text     "math"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["mentee_id"], name: "index_matches_on_mentee_id"
@@ -166,6 +179,8 @@ ActiveRecord::Schema.define(version: 20170623210652) do
     t.date     "planned_at"
     t.date     "completed_at"
     t.integer  "online_lecture_history_id"
+    t.string   "tag_color"
+    t.integer  "rating"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
     t.index ["match_id"], name: "index_online_lecture_histories_on_match_id"
@@ -210,7 +225,9 @@ ActiveRecord::Schema.define(version: 20170623210652) do
     t.string  "name",               null: false
     t.string  "uid",                null: false
     t.integer "online_provider_id", null: false
+    t.integer "subject_id",         null: false
     t.index ["online_provider_id"], name: "index_online_teachers_on_online_provider_id"
+    t.index ["subject_id"], name: "index_online_teachers_on_subject_id"
   end
 
   create_table "problem_collection_histories", force: :cascade do |t|
@@ -234,13 +251,16 @@ ActiveRecord::Schema.define(version: 20170623210652) do
   end
 
   create_table "problem_collections", force: :cascade do |t|
-    t.integer  "subject_id",        null: false
-    t.integer  "problem_source_id", null: false
-    t.string   "name",              null: false
-    t.integer  "total_score"
+    t.integer  "subject_id",                        null: false
+    t.integer  "problem_source_id",                 null: false
+    t.string   "name",                              null: false
+    t.integer  "problem_count",     default: 0
+    t.integer  "total_score",       default: 0
     t.date     "test_day"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.boolean  "published",         default: false
+    t.integer  "solved_count",      default: 0
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.index ["problem_source_id"], name: "index_problem_collections_on_problem_source_id"
     t.index ["subject_id"], name: "index_problem_collections_on_subject_id"
   end
@@ -251,7 +271,7 @@ ActiveRecord::Schema.define(version: 20170623210652) do
     t.integer  "problem_collection_id",         null: false
     t.integer  "problem_id",                    null: false
     t.integer  "problem_collection_history_id"
-    t.integer  "users_answer"
+    t.string   "users_answer"
     t.boolean  "correct"
     t.boolean  "check"
     t.string   "comment_image_file_name"
@@ -272,28 +292,35 @@ ActiveRecord::Schema.define(version: 20170623210652) do
   end
 
   create_table "problems", force: :cascade do |t|
-    t.integer  "subject_id",                            null: false
+    t.integer  "subject_id",                                              null: false
     t.integer  "level"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
-    t.integer  "answer"
+    t.integer  "score",                                       default: 0
+    t.text     "content",                    limit: 16777215
+    t.text     "exm_1"
+    t.text     "exm_2"
+    t.text     "exm_3"
+    t.text     "exm_4"
+    t.text     "exm_5"
+    t.string   "answer"
+    t.text     "explanation",                limit: 16777215
+    t.integer  "total_count",                                 default: 0
+    t.integer  "correct_count",                               default: 0
+    t.integer  "problem_id"
+    t.boolean  "set"
+    t.string   "content_image_file_name"
+    t.string   "content_image_content_type"
+    t.integer  "content_image_file_size"
+    t.datetime "content_image_updated_at"
     t.string   "answer_image_file_name"
     t.string   "answer_image_content_type"
     t.integer  "answer_image_file_size"
     t.datetime "answer_image_updated_at"
-    t.integer  "score",                     default: 1
-    t.integer  "total_count",               default: 0
-    t.integer  "correct_count",             default: 0
-    t.integer  "problem_id"
     t.string   "audio_file_name"
     t.string   "audio_content_type"
     t.integer  "audio_file_size"
     t.datetime "audio_updated_at"
-    t.string   "problem_hwp"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
     t.index ["problem_id"], name: "index_problems_on_problem_id"
     t.index ["subject_id"], name: "index_problems_on_subject_id"
   end
@@ -311,7 +338,14 @@ ActiveRecord::Schema.define(version: 20170623210652) do
   end
 
   create_table "subjects", force: :cascade do |t|
-    t.string "name", null: false
+    t.string  "name",            null: false
+    t.integer "order"
+    t.integer "depth"
+    t.string  "path"
+    t.integer "subject_id"
+    t.integer "main_subject_id"
+    t.index ["main_subject_id"], name: "index_subjects_on_main_subject_id"
+    t.index ["subject_id"], name: "index_subjects_on_subject_id"
   end
 
   create_table "universities", force: :cascade do |t|
@@ -341,6 +375,7 @@ ActiveRecord::Schema.define(version: 20170623210652) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.datetime "last_seen"
     t.datetime "created_at",                       null: false
     t.datetime "updated_at",                       null: false
     t.index ["phone"], name: "index_users_on_phone", unique: true

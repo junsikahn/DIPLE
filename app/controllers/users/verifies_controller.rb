@@ -4,6 +4,7 @@ class Users::VerifiesController < ApplicationController
 
   # GET /users/verify
   def show
+    SendPinJob.perform_now(current_user) if !current_user.pin_sent_at?
     @user = User.new
   end
 

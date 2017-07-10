@@ -48,7 +48,7 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.0]
       # t.datetime :locked_at
 
       # Lastseenable
-      # t.datetime :last_seen
+      t.datetime :last_seen
 
       t.timestamps null: false
     end
@@ -58,5 +58,9 @@ class DeviseCreateUsers < ActiveRecord::Migration[5.0]
     # add_index :users, :reset_password_token, unique: true
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
+
+    User.create(name: '안준식', phone: '01088627156', password: 'test1234', verified_at: Time.zone.now, gender: true, birthday: '1986-11-21', agreed_at: Time.zone.now)
+    User.create(name: '윤석기', phone: '01091740793', password: 'test1234', verified_at: Time.zone.now, gender: true, birthday: '1986-12-05', agreed_at: Time.zone.now)
+    User.create(name: '김학생', phone: '01098627156', password: 'test1234', verified_at: Time.zone.now, gender: false, birthday: '2000-11-21', agreed_at: Time.zone.now)
   end
 end

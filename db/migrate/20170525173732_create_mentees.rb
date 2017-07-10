@@ -5,5 +5,7 @@ class CreateMentees < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
+
+    Mentee.create(user_id: 3)
   end
 end

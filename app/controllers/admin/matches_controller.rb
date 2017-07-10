@@ -15,6 +15,7 @@ class Admin::MatchesController < AdminController
   # GET /admin/matches/new
   def new
     @admin_match = Admin::Match.new
+    2.times { @admin_match.schedules.build }
   end
 
   # GET /admin/matches/1/edit
